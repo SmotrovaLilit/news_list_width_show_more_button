@@ -2,8 +2,7 @@
 
 ##Инструкция
 ### Подключение компонента
-```
-#!php
+```php
 <?php
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 global $APPLICATION;
@@ -66,8 +65,7 @@ $APPLICATION->IncludeComponent("bitrix:news.list", "news.list", array(
 
 ### Шаблон компонента news.list
 Необходимо проверить если аякс запрос, то стереть буфер
-```
-#!php
+```php
 $ajax = false;
 if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     $ajax = true;
@@ -85,33 +83,31 @@ if ($ajax) {
 ```
 
 ###Подгрузка элементов на аяксе
-```
-#!javascript
+```javascript
+$(function() {
+    var container_list_selector = '.news-list',
+        show_more_selector = '.show-more';
 
-    $(function() {
-        var container_list_selector = '.news-list',
-            show_more_selector = '.show-more';
-
-        $('body').on ('click', show_more_selector, function (e) {
-            var $container_list_selector = $(container_list_selector),
-                $this = $(this),
-                path = $this.attr('href');
-            $.get(path, function (data) {
-                var element = document.createElement('div'),
-                    $domElement =  $(element);
-                $domElement.html(data);
-                $container_list_selector.append($domElement.find(container_list_selector).html());
-                var $newShowMore = $domElement.find(show_more_selector);
-                if ($domElement.find(show_more_selector).length) {
-                    $this.attr('href', $newShowMore.attr('href'));
-                } else {
-                    $this.hide();
-                }
-            });
-
-            e.preventDefault();
+    $('body').on ('click', show_more_selector, function (e) {
+        var $container_list_selector = $(container_list_selector),
+            $this = $(this),
+            path = $this.attr('href');
+        $.get(path, function (data) {
+            var element = document.createElement('div'),
+                $domElement =  $(element);
+            $domElement.html(data);
+            $container_list_selector.append($domElement.find(container_list_selector).html());
+            var $newShowMore = $domElement.find(show_more_selector);
+            if ($domElement.find(show_more_selector).length) {
+                $this.attr('href', $newShowMore.attr('href'));
+            } else {
+                $this.hide();
+            }
         });
+
+        e.preventDefault();
     });
+});
 ```
 
 ### Шаблон компонента постраничной навигации
